@@ -1,0 +1,39 @@
+Copyright Negoita Anca-Elena, 331CA, 2023-2024
+
+Task Dispatcher and Host
+-------------------------------------------------------------------------------------------------
+In this project, a task dispatcher and a host resolver needed to be implemented in order to solve
+accelerated and skillfully each task by different nodes simultaneously.
+
+The task dispatcher is responsible for distributing tasks efficiently among available hosts in
+parallel, using 4 different algorithms to discover the suitable host for the task: 
+Round Robin, Shortest Queue, Size Interval Task Assigment, and Least Work Left.
+Each received task is synchronized so as not to overlap another incoming task(they can have
+the same starting point).
+
+The host component is responsible for solving the tasks. It manages a queue of tasks and
+executes each task depending on its priority, order of arrival or if it is preemptible (can be
+put in waiting state so as a more important task of higher priority can run instead). The
+selected task is executed, its duration decreases until it reaches 0(it's finished), and
+then another task is selected from the queue, if it exists. The host runs until the program
+is shut down.
+
+The structure used by each host is a Priority Queue sorted descendent by each task's priority,
+and after ascending by its id/ order of arrival.
+A new task arrives and it is verrified:
+- if a task is not running, the new task can run directly.
+- if a task is running:
+    - if the task is preemptible and has a smaller priority than the new task, the running task 
+    is replaced by the new one and put in queue. The queue will put it automatically in its
+    right position.
+    - else is put directly in the queue.
+
+The 4 algorithm are:
+- Round Robin: each task is send to the host of id (last_id + 1) % host_size, where host_size is
+the number of hosts in total
+- Shortest Queue: each task is send to the host that has the shortest queue (minimum number of
+tasks received)
+- Size Interval Task Assigment: there are 3 hosts, each one of them solving 3 types of tasks:
+short, medium, long
+- Least Work Left: as its name states, this method sends a task to the host that has the minimum
+work left (total duration of all its tasks to be run).
